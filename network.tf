@@ -32,6 +32,11 @@ module "sn_pr_a_label" {
   context = module.label.context
 
   name = "liberland-subnet-private-a"
+
+  tags = {
+    "kubernetes.io/cluster/${aws_eks_cluster.liberland.name}" = "shared"
+    "kubernetes.io/role/internal-elb" = "1"
+  }
 }
 
 resource "aws_subnet" "private-a" {
@@ -48,6 +53,11 @@ module "sn_pr_b_label" {
   context = module.label.context
 
   name = "liberland-subnet-private-b"
+
+  tags = {
+    "kubernetes.io/cluster/${aws_eks_cluster.liberland.name}" = "shared"
+    "kubernetes.io/role/internal-elb" = "1"
+  }
 }
 
 resource "aws_subnet" "private-b" {
@@ -64,6 +74,11 @@ module "sn_pr_c_label" {
   context = module.label.context
 
   name = "liberland-subnet-private-c"
+
+  tags = {
+    "kubernetes.io/cluster/${aws_eks_cluster.liberland.name}" = "shared"
+    "kubernetes.io/role/internal-elb" = "1"
+  }
 }
 
 resource "aws_subnet" "private-c" {
@@ -80,6 +95,10 @@ module "sn_pu_a_label" {
   context = module.label.context
 
   name = "liberland-subnet-public-a"
+
+  tags = {
+    "kubernetes.io/role/elb" = "1"
+  }
 }
 
 resource "aws_subnet" "public-a" {
@@ -96,6 +115,10 @@ module "sn_pu_b_label" {
   context = module.label.context
 
   name = "liberland-subnet-public-b"
+
+  tags = {
+    "kubernetes.io/role/elb" = "1"
+  }
 }
 
 resource "aws_subnet" "public-b" {
@@ -112,6 +135,10 @@ module "sn_pu_c_label" {
   context = module.label.context
 
   name = "liberland-subnet-public-c"
+
+  tags = {
+    "kubernetes.io/role/elb" = "1"
+  }
 }
 
 resource "aws_subnet" "public-c" {
