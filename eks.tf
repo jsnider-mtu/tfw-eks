@@ -1,5 +1,5 @@
 resource "aws_iam_role" "liberland" {
-  name = "eks-cluster-role"
+  name = "liberland-cluster-role"
 
   assume_role_policy = <<POLICY
 {
