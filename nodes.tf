@@ -51,7 +51,7 @@ resource "aws_eks_node_group" "liberland" {
   }
 
   update_config {
-    max_unavailable = 2
+    max_unavailable = 1
   }
 
   remote_access {
