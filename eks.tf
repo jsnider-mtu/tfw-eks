@@ -40,6 +40,7 @@ module "eks_label" {
 resource "aws_eks_cluster" "liberland" {
   name     = "liberland"
   role_arn = aws_iam_role.liberland.arn
+  version  = "1.21"
 
   encryption_config {
     provider {
