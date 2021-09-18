@@ -34,7 +34,7 @@ module "sn_pr_a_label" {
   name = "liberland-subnet-private-a"
 
   tags = {
-    "kubernetes.io/cluster/${aws_eks_cluster.liberland.name}" = "shared"
+    "kubernetes.io/cluster/${aws_eks_cluster.liberland.name}" = "shared",
     "kubernetes.io/role/internal-elb" = "1"
   }
 }
@@ -55,7 +55,7 @@ module "sn_pr_b_label" {
   name = "liberland-subnet-private-b"
 
   tags = {
-    "kubernetes.io/cluster/${aws_eks_cluster.liberland.name}" = "shared"
+    "kubernetes.io/cluster/${aws_eks_cluster.liberland.name}" = "shared",
     "kubernetes.io/role/internal-elb" = "1"
   }
 }
@@ -76,7 +76,7 @@ module "sn_pr_c_label" {
   name = "liberland-subnet-private-c"
 
   tags = {
-    "kubernetes.io/cluster/${aws_eks_cluster.liberland.name}" = "shared"
+    "kubernetes.io/cluster/${aws_eks_cluster.liberland.name}" = "shared",
     "kubernetes.io/role/internal-elb" = "1"
   }
 }
