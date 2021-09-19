@@ -14,7 +14,7 @@ data "aws_iam_policy_document" "kms" {
 
     principals {
       type        = "AWS"
-      identifiers = [aws_iam_role.liberland.arn]
+      identifiers = [aws_iam_role.liberland.arn, "arn:aws:iam::556005419303:user/terraform"]
     }
   }
 }
