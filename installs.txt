@@ -1,0 +1,8 @@
+ToDo:
+-----
+AWS Load Balancer Controller
+velero
+kyverno?
+
+helm install autoscaler autoscaler/cluster-autoscaler -n autoscaler --set autoDiscovery.clusterName=liberland --set awsRegion=us-east-1 --set rbac.serviceAccount.annotations."eks\.amazonaws\.com/role-arn"=arn:aws:iam::556005419303:role/autoscaler-role --set rbac.serviceAccount.name=autoscaler-sa
+helm install ingress-nginx ingress-nginx/ingress-nginx -n ingress-nginx --set controller.defaultTLS.cert=$CERT_B64 --set controller.defaultTLS.key=$KEY_B64
