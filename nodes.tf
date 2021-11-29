@@ -172,3 +172,11 @@ resource "aws_eks_node_group" "spottwo" {
     aws_iam_role_policy_attachment.example-AmazonEC2ContainerRegistryReadOnly,
   ]
 }
+
+output "spotoneasg" {
+  value = aws_eks_node_group.spotone.resources.autoscaling_groups.name
+}
+
+output "spottwoasg" {
+  value = aws_eks_node_group.spottwo.resources.autoscaling_groups.name
+}
