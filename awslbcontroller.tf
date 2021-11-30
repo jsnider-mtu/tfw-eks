@@ -233,11 +233,11 @@ resource "aws_iam_role" "lb-controller" {
             "Effect": "Allow",
             "Action": "sts:AssumeRoleWithWebIdentity",
             "Principal": {
-                "Federated": "arn:aws:iam::556005419303:oidc-provider/oidc.eks.us-east-1.amazonaws.com/id/188020E1CD2C0191ECE6A6C32DC95755"
+                "Federated": "arn:aws:iam::556005419303:oidc-provider/oidc.eks.us-east-1.amazonaws.com/id/B719008E043C20632D48134D69534094"
             },
             "Condition": {
                 "StringEquals": {
-                    "oidc.eks.us-east-1.amazonaws.com/id/188020E1CD2C0191ECE6A6C32DC95755:sub": "system:serviceaccount:kube-system:aws-load-balancer-controller"
+                    "oidc.eks.us-east-1.amazonaws.com/id/B719008E043C20632D48134D69534094:sub": "system:serviceaccount:kube-system:aws-load-balancer-controller"
                 }
             }
         }
