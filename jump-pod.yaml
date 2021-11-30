@@ -8,7 +8,8 @@ spec:
   containers:
   - name: jump-pod
     image: alpine:latest
-    command: sleep
+    command:
+    - "sleep"
     args:
     - "999999999999999999999999"
     imagePullPolicy: Always
