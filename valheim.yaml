@@ -90,6 +90,28 @@ spec:
         - name: valheim
           mountPath: /home/steam/backups
           subPath: backups
+      - name: http-svc
+        image: k8s.gcr.io/e2e-test-images/echoserver:2.3
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8080
+        env:
+        - name: NODE_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: spec.nodeName
+        - name: POD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: POD_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        - name: POD_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.podIP
       volumes:
       - name: valheim
         persistentVolumeClaim:
@@ -98,12 +120,15 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  namespace: valheim
-  name: valheim
   annotations:
+    service.beta.kubernetes.io/aws-load-balancer-healthcheck-protocol: http
+    service.beta.kubernetes.io/aws-load-balancer-healthcheck-port: "8080"
+    service.beta.kubernetes.io/aws-load-balancer-healthcheck-path: "/"
     service.beta.kubernetes.io/aws-load-balancer-type: external
     service.beta.kubernetes.io/aws-load-balancer-nlb-target-type: ip
     service.beta.kubernetes.io/aws-load-balancer-scheme: internet-facing
+  namespace: valheim
+  name: valheim
 spec:
   ports:
   - name: "2456"
