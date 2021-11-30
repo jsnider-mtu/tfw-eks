@@ -173,10 +173,3 @@ resource "aws_eks_node_group" "spottwo" {
   ]
 }
 
-output "spotoneasg" {
-  value = aws_eks_node_group.spotone.resources[*].autoscaling_groups[*].name
-}
-
-output "spottwoasg" {
-  value = aws_eks_node_group.spottwo.resources[*].autoscaling_groups[*].name
-}

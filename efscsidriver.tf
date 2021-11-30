@@ -75,3 +75,55 @@ POLICY
 
   tags = module.efs_label.tags
 }
+
+module "real_efs_label" {
+  source  = "cloudposse/label/null"
+  version = "0.25.0"
+  context = module.label.context
+
+  name = "liberland-efs"
+}
+
+resource "aws_efs_file_system" "liberland" {
+  creation_token = "liberland"
+
+  encrypted = true
+
+  lifecycle_policy {
+    transition_to_ia = "AFTER_30_DAYS"
+  }
+
+  lifecycle_policy {
+    transition_to_primary_storage_class = "AFTER_1_ACCESS"
+  }
+
+  tags = module.real_efs_label.tags
+}
+
+resource "aws_efs_backup_policy" "efs_backup" {
+  file_system_id = aws_efs_file_system.liberland.id
+
+  backup_policy {
+    status = "ENABLED"
+  }
+}
+
+resource "aws_efs_mount_target" "a" {
+  file_system_id = aws_efs_file_system.liberland.id
+  subnet_id      = aws_subnet.private-a.id
+}
+
+resource "aws_efs_mount_target" "b" {
+  file_system_id = aws_efs_file_system.liberland.id
+  subnet_id      = aws_subnet.private-b.id
+}
+
+resource "aws_efs_mount_target" "c" {
+  file_system_id = aws_efs_file_system.liberland.id
+  subnet_id      = aws_subnet.private-c.id
+}
+
+output "efs_dns" {
+  value = aws_efs_file_system.liberland.dns_name
+}
+
