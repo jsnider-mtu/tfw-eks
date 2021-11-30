@@ -9,9 +9,8 @@ spec:
   - name: jump-pod
     image: alpine:latest
     command:
-    - "sleep"
-    args:
-    - "999999999999999999999999"
+    - sleep
+    - "3600"
     imagePullPolicy: Always
     resources:
       limits:
