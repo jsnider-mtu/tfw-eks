@@ -5,6 +5,8 @@ metadata:
   namespace: valheim
   name: valheim
 spec:
+  volumeName: pvc-5e718359-8cf0-4df8-99eb-4d626bb51370
+  volumeMode: Filesystem
   accessModes:
   - ReadWriteMany
   storageClassName: efs-sc
