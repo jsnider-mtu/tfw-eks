@@ -25,6 +25,8 @@ metadata:
   name: valheim
 spec:
   replicas: 1
+  strategy:
+    type: Recreate
   selector:
     matchLabels:
       app: valheim
