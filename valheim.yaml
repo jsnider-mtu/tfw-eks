@@ -106,19 +106,18 @@ metadata:
     service.beta.kubernetes.io/aws-load-balancer-scheme: internet-facing
 spec:
   ports:
-  - name: 2456
+  - name: "2456"
     port: 2456
     protocol: UDP
     targetPort: 2456
-  - name: 2457
+  - name: "2457"
     port: 2457
     protocol: UDP
     targetPort: 2457
-  - name: 2458
+  - name: "2458"
     port: 2458
     protocol: UDP
     targetPort: 2458
   selector:
-    matchLabels:
-      app: valheim
+    app: valheim
   type: LoadBalancer
