@@ -76,6 +76,25 @@ POLICY
   tags = module.efs_label.tags
 }
 
+resource "aws_security_group" "efs" {
+  name   = "efs-sg"
+  vpc_id = aws_vpc.vpc.id
+
+  ingress {
+    security_groups = [aws_eks_node_group.ondemand.resources[0].remote_access_security_group_id, aws_eks_node_group.spotone.resources[0].remote_access_security_group_id, aws_eks_node_group.spottwo.resources[0].remote_access_security_group_id]
+    from_port = 2049
+    to_port   = 2049
+    protocol  = "tcp"
+  }
+
+  egress {
+    security_groups = [aws_eks_node_group.ondemand.resources[0].remote_access_security_group_id, aws_eks_node_group.spotone.resources[0].remote_access_security_group_id, aws_eks_node_group.spottwo.resources[0].remote_access_security_group_id]
+    from_port = 0
+    to_port   = 0
+    protocol  = "-1"
+  }
+}
+
 module "real_efs_label" {
   source  = "cloudposse/label/null"
   version = "0.25.0"
@@ -109,18 +128,21 @@ resource "aws_efs_backup_policy" "efs_backup" {
 }
 
 resource "aws_efs_mount_target" "a" {
-  file_system_id = aws_efs_file_system.liberland.id
-  subnet_id      = aws_subnet.private-a.id
+  file_system_id  = aws_efs_file_system.liberland.id
+  subnet_id       = aws_subnet.private-a.id
+  security_groups = [aws_security_group.efs.id]
 }
 
 resource "aws_efs_mount_target" "b" {
-  file_system_id = aws_efs_file_system.liberland.id
-  subnet_id      = aws_subnet.private-b.id
+  file_system_id  = aws_efs_file_system.liberland.id
+  subnet_id       = aws_subnet.private-b.id
+  security_groups = [aws_security_group.efs.id]
 }
 
 resource "aws_efs_mount_target" "c" {
-  file_system_id = aws_efs_file_system.liberland.id
-  subnet_id      = aws_subnet.private-c.id
+  file_system_id  = aws_efs_file_system.liberland.id
+  subnet_id       = aws_subnet.private-c.id
+  security_groups = [aws_security_group.efs.id]
 }
 
 output "efs_dns" {
