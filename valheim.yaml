@@ -1,3 +1,5 @@
+#To reclaim PV: k patch pv pvc-5e718359-8cf0-4df8-99eb-4d626bb51370 -p '{"spec":{"claimRef": null}}'
+#Then k apply -f valheim.yaml
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
