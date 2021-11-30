@@ -1,11 +1,11 @@
----
-apiVersion: v1
-kind: PersistentVolume
-metadata:
-  name: valheim
-spec:
-  persistentVolumeReclaimPolicy: Retain
-  storageClassName: gp2
+#---
+#apiVersion: v1
+#kind: PersistentVolume
+#metadata:
+#  name: valheim
+#spec:
+#  persistentVolumeReclaimPolicy: Retain
+#  storageClassName: gp2
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -13,7 +13,12 @@ metadata:
   namespace: valheim
   name: valheim
 spec:
-  volumeName: valheim
+  accessModes:
+  - ReadWriteMany
+  storageClassName: efs-sc
+  resources:
+    requests:
+      storage: 30Gi
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -32,6 +37,8 @@ spec:
       labels:
         app: valheim
     spec:
+      nodeSelector:
+        lifecycle: spot
       containers:
       - name: valheim
         image: mbround18/valheim:latest
@@ -71,8 +78,8 @@ spec:
         - containerPort: 2458
         resources:
           limits:
-            cpu: 1
-            memory: 3Gi
+            cpu: 2
+            memory: 4Gi
         volumeMounts:
         - name: valheim
           mountPath: /home/steam/.config/unity3d/IronGate/Valheim

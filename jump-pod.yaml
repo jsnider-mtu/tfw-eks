@@ -1,0 +1,25 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: jump-pod
+spec:
+  nodeSelector:
+    lifecycle: spot
+  containers:
+  - name: jump-pod
+    image: alpine:latest
+    command: sleep
+    args:
+    - "999999999999999999999999"
+    imagePullPolicy: Always
+    resources:
+      limits:
+        cpu: "1"
+        memory: 1Gi
+    volumeMounts:
+    - name: valheim
+      mountPath: /valheim
+  volumes:
+  - name: valheim
+    persistentVolumeClaim:
+      claimName: valheim
