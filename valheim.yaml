@@ -100,6 +100,10 @@ kind: Service
 metadata:
   namespace: valheim
   name: valheim
+  annotations:
+    service.beta.kubernetes.io/aws-load-balancer-type: external
+    service.beta.kubernetes.io/aws-load-balancer-nlb-target-type: ip
+    service.beta.kubernetes.io/aws-load-balancer-scheme: internet-facing
 spec:
   ports:
   - name: 2456
@@ -117,4 +121,4 @@ spec:
   selector:
     matchLabels:
       app: valheim
-  type: ClusterIP
+  type: LoadBalancer
