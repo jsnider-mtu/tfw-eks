@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kubelet-stats-exporter
+  namespace: monitor
+spec:
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      name: kubelet-stats-exporter
+  template:
+    metadata:
+      labels:
+        name: kubelet-stats-exporter
+    spec:
+      containers:
+      - name: kubelet-stats-exporter
+        image: 556005419303.dkr.ecr.us-east-1.amazonaws.com/k8s/kubelet-stats-exporter:latest # Change to your image
+        # imagePullPolicy: Never
+        ports:
+        - name: metrics
+          containerPort: 9118
+        # Increase these resource values for larger clusters
+        resources:
+          limits:
+            cpu: 50m
+            memory: 150Mi
+          requests:
+            cpu: 10m
+            memory: 50Mi
+      serviceAccountName: kubelet-stats-exporter  
