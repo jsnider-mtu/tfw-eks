@@ -76,8 +76,11 @@ spec:
         - containerPort: 2458
         resources:
           limits:
-            cpu: 2
+            cpu: 1500m
             memory: 4Gi
+          requests:
+            cpu: 500m
+            memory: 3Gi
         volumeMounts:
         - name: valheim
           mountPath: /home/steam/.config/unity3d/IronGate/Valheim
