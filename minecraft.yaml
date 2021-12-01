@@ -50,7 +50,7 @@ spec:
         - name: DIFFICULTY
           value: "easy"
         - name: OPS
-          value: "LordPartyFoul"
+          value: "lordPartyFoul"
         - name: MAX_PLAYERS
           value: "20"
         - name: MAX_WORLD_SIZE
