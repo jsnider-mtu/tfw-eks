@@ -1,0 +1,158 @@
+#To reclaim PV: k patch pv pvc-bb65d73a-5b0c-4f10-a1fc-9053e60c910e -p '{"spec":{"claimRef": null}}'
+#Then k apply -f minecraft.yaml
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  namespace: minecraft
+  name: minecraft
+spec:
+  volumeName: pvc-bb65d73a-5b0c-4f10-a1fc-9053e60c910e
+  volumeMode: Filesystem
+  accessModes:
+  - ReadWriteMany
+  storageClassName: efs-sc
+  resources:
+    requests:
+      storage: 30Gi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: minecraft
+  namespace: minecraft
+  name: minecraft
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: minecraft
+  template:
+    metadata:
+      labels:
+        app: minecraft
+    spec:
+      nodeSelector:
+        lifecycle: spot
+      containers:
+      - name: minecraft
+        image: itzg/minecraft-server:latest
+        env:
+        - name: EULA
+          value: "TRUE"
+        - name: TYPE
+          value: "VANILLA"
+        - name: VERSION
+          value: "LATEST"
+        - name: DIFFICULTY
+          value: "easy"
+        - name: OPS
+          value: "LordPartyFoul"
+        - name: MAX_PLAYERS
+          value: "20"
+        - name: MAX_WORLD_SIZE
+          value: "10000"
+        - name: ALLOW_NETHER
+          value: "true"
+        - name: ANNOUNCE_PLAYER_ACHIEVEMENTS
+          value: "true"
+        - name: ENABLE_COMMAND_BLOCK
+          value: "true"
+        - name: FORCE_GAMEMODE
+          value: "false"
+        - name: GENERATE_STRUCTURES
+          value: "true"
+        - name: HARDCORE
+          value: "false"
+        - name: MAX_BUILD_HEIGHT
+          value: "256"
+        - name: MAX_TICK_TIME
+          value: "60000"
+        - name: SPAWN_ANIMALS
+          value: "true"
+        - name: SPAWN_MONSTERS
+          value: "true"
+        - name: SPAWN_NPCS
+          value: "true"
+        - name: VIEW_DISTANCE
+          value: "10"
+        - name: MODE
+          value: "survival"
+        - name: MOTD
+          value: "Welcome to Minecraft on Kubernetes"
+        - name: PVP
+          value: "false"
+        - name: LEVEL_TYPE
+          value: "DEFAULT"
+        - name: LEVEL
+          value: "world"
+        - name: ONLINE_MODE
+          value: "true"
+        - name: MEMORY
+          value: "1024M"
+        - name: JVM_OPTS
+          value: ""
+        - name: JVM_XX_OPTS
+          value: ""
+        - name: ENABLE_RCON
+          value: "false"
+        imagePullPolicy: Always
+        readinessProbe:
+          tcpSocket:
+            port: 25565
+          initialDelaySeconds: 30
+          periodSeconds: 5
+          failureThreshold: 10
+          successThreshold: 1
+          timeoutSeconds: 1
+        livenessProbe:
+          tcpSocket:
+            port: 25565
+          initialDelaySeconds: 30
+          periodSeconds: 5
+          failureThreshold: 10
+          successThreshold: 1
+          timeoutSeconds: 1
+        ports:
+        - name: minecraft
+          containerPort: 25565
+          protocol: TCP
+        resources:
+          limits:
+            cpu: 1
+            memory: 2Gi
+          requests:
+            cpu: 500m
+            memory: 512Mi
+        volumeMounts:
+        - name: minecraft
+          mountPath: /data
+      volumes:
+      - name: minecraft
+        persistentVolumeClaim:
+          claimName: minecraft
+---
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    service.beta.kubernetes.io/aws-load-balancer-healthcheck-protocol: tcp
+    service.beta.kubernetes.io/aws-load-balancer-healthcheck-port: "25565"
+    service.beta.kubernetes.io/aws-load-balancer-type: external
+    service.beta.kubernetes.io/aws-load-balancer-nlb-target-type: ip
+    service.beta.kubernetes.io/aws-load-balancer-scheme: internet-facing
+    service.beta.kubernetes.io/aws-load-balancer-cross-zone-load-balancing-enabled: "true"
+  namespace: minecraft
+  name: minecraft
+spec:
+  ports:
+  - name: "25565"
+    port: 25565
+    protocol: TCP
+    targetPort: 25565
+  selector:
+    app: minecraft
+  type: LoadBalancer
