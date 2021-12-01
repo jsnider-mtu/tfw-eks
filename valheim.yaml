@@ -76,10 +76,10 @@ spec:
         - containerPort: 2458
         resources:
           limits:
-            cpu: 1500m
+            cpu: 500m
             memory: 4Gi
           requests:
-            cpu: 500m
+            cpu: 100m
             memory: 3Gi
         volumeMounts:
         - name: valheim
