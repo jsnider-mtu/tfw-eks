@@ -15,5 +15,5 @@ helm install efs-csi-driver aws-efs-csi-driver/aws-efs-csi-driver -n kube-system
 kubectl apply -f metrics-server.yaml
 helm install prometheus prometheus-community/kube-prometheus-stack -n monitor --set kubeStateMetrics.enabled="false" --set alertmanager.enabled="false" --set prometheusOperator.nodeSelector.lifecycle=ondemand --set grafana.nodeSelector.lifecycle=ondemand --set prometheus.prometheusSpec.nodeSelector.lifecycle=ondemand --set prometheus.prometheusSpec.additionalScrapeConfigs[0].job_name=kube-state-metrics --set-string prometheus.prometheusSpec.additionalScrapeConfigs[0].static_configs[0].targets[0]=kube-state-metrics.kube-system.svc.cluster.local:8080
 helm install istio-base istio/base -n istio-system
-helm install istiod istio/istiod -n istio-system --wait
-helm install istio-ingress istio/gateway -n istio-ingress --wait
+helm install istiod istio/istiod -n istio-system --set pilot.nodeSelector.lifecycle=ondemand --wait
+helm install istio-ingress istio/gateway -n istio-ingress --set nodeSelector.lifecycle=ondemand --wait
